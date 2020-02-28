@@ -1,25 +1,39 @@
 import './index.css';
+import React, {useState} from 'react';
 import PropsTypes from 'prop-types';
-import React from 'react';
 import ReactDOM from 'react-dom';
 
 const Square = (props) => {
-
   return (
-    <button className="square">
+    <button className="square" onClick={props.onClick}>
       {props.value}
     </button>
   );
 };
 
 Square.propTypes = {
-  value: PropsTypes.number.isRequired
+  value: PropsTypes.string,
+  onClick: PropsTypes.func.isRequired
 };
 
 const Board = () => {
+  const [squares, setSquares] = useState(Array(9).fill(null));
   const status = 'Next player: X';
+  const updateBoard = (i) => {
+    const states = squares.slice();
+    states[i] = 'X';
+    setSquares(states);
+  };
+
   const renderSquare = (i) => {
-    return <Square value={i} />;
+    const onClick = () => { updateBoard(i); };
+
+    return (
+      <Square
+        value={squares[i]}
+        onClick={onClick}
+      />
+    );
   };
 
   return (
