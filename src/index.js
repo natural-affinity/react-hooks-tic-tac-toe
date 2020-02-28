@@ -1,20 +1,25 @@
 import './index.css';
+import PropsTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-const Square = () => {
+const Square = (props) => {
 
   return (
     <button className="square">
-      {/*TODO*/}
+      {props.value}
     </button>
   );
+};
+
+Square.propTypes = {
+  value: PropsTypes.number.isRequired
 };
 
 const Board = () => {
   const status = 'Next player: X';
   const renderSquare = (i) => {
-    return <Square />;
+    return <Square value={i} />;
   };
 
   return (
