@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import {Board} from './Board';
 import {calculateWinner} from './helpers';
 
-export  const Game = () => {
+export const Game = () => {
   const [history, setHistory] = useState([{squares: Array(9).fill(null)}]);
   const [xIsNext, setxIsNext] = useState(true);
   const [stepNumber, setStepNumber] = useState(0);
