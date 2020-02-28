@@ -16,29 +16,13 @@ Square.propTypes = {
   onClick: PropsTypes.func.isRequired
 };
 
-const Board = () => {
-  const [squares, setSquares] = useState(Array(9).fill(null));
-  const [xIsNext, setxIsNext] = useState(true);
-  const winner = calculateWinner(squares);
-  const status = (winner) ? `Winner: ${winner}` : `Next player: ${xIsNext ? 'X' : 'O'}`;
-
-  const updateBoard = (i) => {
-    const states = squares.slice();
-    if (calculateWinner(squares) || squares[i]) {
-      return;
-    }
-
-    states[i] = xIsNext ? 'X' : 'O';
-    setSquares(states);
-    setxIsNext(!xIsNext);
-  };
-
+const Board = (props) => {
   const renderSquare = (i) => {
-    const onClick = () => { updateBoard(i); };
+    const onClick = () => {props.onClick(i);};
 
     return (
       <Square
-        value={squares[i]}
+        value={props.squares[i]}
         onClick={onClick}
       />
     );
@@ -46,7 +30,6 @@ const Board = () => {
 
   return (
     <div>
-      <div className="status">{status}</div>
       <div className="board-row">
         {renderSquare(0)}
         {renderSquare(1)}
@@ -66,14 +49,43 @@ const Board = () => {
   );
 };
 
+Board.propTypes = {
+  squares: PropsTypes.array.isRequired,
+  onClick: PropsTypes.func.isRequired
+};
+
 const Game = () => {
+  const [history, setHistory] = useState([{squares: Array(9).fill(null)}]);
+  const [xIsNext, setxIsNext] = useState(true);
+
+  const current = history[history.length - 1];
+  const winner = calculateWinner(current.squares);
+  const status = (winner) ? `Winner: ${winner}` : `Next player: ${xIsNext ? 'X' : 'O'}`;
+
+  const updateBoard = (i) => {
+    const h = history;
+    const c = h[h.length - 1];
+    const states = c.squares.slice();
+    if (calculateWinner(states) || states[i]) {
+      return;
+    }
+
+    states[i] = xIsNext ? 'X' : 'O';
+    setHistory(h.concat([{squares: states}]));
+    setxIsNext(!xIsNext);
+  };
+  const onClick = (i) => { updateBoard(i); };
+
   return (
     <div className="game">
       <div className="game-board">
-        <Board />
+        <Board
+          squares={current.squares}
+          onClick={onClick}
+        />
       </div>
       <div className="game-info">
-        <div>{/* status */}</div>
+        <div>{status}</div>
         <ol>{/* TODO */}</ol>
       </div>
     </div>
