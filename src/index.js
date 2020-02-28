@@ -18,11 +18,14 @@ Square.propTypes = {
 
 const Board = () => {
   const [squares, setSquares] = useState(Array(9).fill(null));
-  const status = 'Next player: X';
+  const [xIsNext, setxIsNext] = useState(true);
+  const status = `Next player: ${xIsNext ? 'X' : 'O'}`;
+
   const updateBoard = (i) => {
     const states = squares.slice();
-    states[i] = 'X';
+    states[i] = xIsNext ? 'X' : 'O';
     setSquares(states);
+    setxIsNext(!xIsNext);
   };
 
   const renderSquare = (i) => {
